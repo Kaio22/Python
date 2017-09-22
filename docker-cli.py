@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+
+import docker 
+import argparse
+
+
+def criar_container(args):
+     client = docker.from_env()
+     executando = client.containers.run(args.imagem, args.comando)
+     print(executando)
+     return(executando)
+
+def listar_containers():
+    client = docker.from_env()
+    get_all = client.containers.list(all)
+    for cada_container in get_all:
+      conectando = client.containers.get(cada_container.id)
+      print("O container %s utilizaa imagem %s rodando o comando %s" % (conectando.short_id, conectando.attrs['Config']['Image'], conectando.attrs['Config']['Cmd']))
+
+
+def procurar_container(imagem):
+    client = docker.from_env()
+    get_all = client.containers.list(all)
+    for cada_container in get_all:
+      conectando = client.containers.get(cada_container.id)
+      imagem_container = conectando.attrs['Config']['Image']
+      if str(imagem) in str(imagem_container):
+        print("Achei o container %s que comtem a palavra %s no nome da sua imagem: %s" % (cada_container.short_id, imagem, imagem_container)) 
+
+def remover_container():
+    client = docker.from_env()
+    get_all = client.containers.list(all)
+    for cada_container in get_all:
+      conectando = client.containers.get(cada_container.id)
+      porta_container = conectando.attrs['HostConfig']['PortBindings']
+      if isinstance(porta, dict):
+        for porta, porta1 in porta_container.items():
+          porta1 = str(porta1)
+          porta2 = ''.join(filter(str.isdigit, porta1))
+          if int(porta2) <= 1024:
+             print("removendo o container %s que esta escutando na porta %s e bindando no host %s " % (cada_container.id, porta, porta2))
+             removendo = cada_container.remove(force=true)
+
+
+parser = argparse.ArgumentParser(description="docker-cli criado na aula de python")
+subparser = parser.add_subparsers()
+
+criar_opt = subparser.add_parser('criar')
+criar_opt.add_argument('--imagem', required=True)
+criar_opt.add_argument('--comando', required=True)
+criar_opt.set_defaults(func=criar_container)
+
+cmd = parser.parse_args()
+cmd.func(cmd)
+
+
+
+#listar_containers()
+#criar_container("alpine", "echo Vaiii")
+#procurar_container("ruby")
+#remover_container()
