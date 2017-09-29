@@ -11,10 +11,9 @@ def criar_container(args):
        executando = client.containers.run(args.imagem, args.comando)
        print(executando)
        return(executando)
-     except docker.errors.ImageNotFound:
+    except docker.errors.ImageNotFound:
        print("Essa Imagem não existe no docker hub FILHO DA PUTAAAAAAA")
-     except docker.errors.NotFound:
-       print("Esse comando não existe no docker seu FILHO DE UMA PUTA VEIA")
+
 
 def listar_containers():
     client = docker.from_env()
